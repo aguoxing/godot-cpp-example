@@ -1,4 +1,3 @@
-[submodule "godot-cpp"]
+[submodule "gdextension/godot-cpp"]
 	path = gdextension/godot-cpp
-	url = https://github.com/aguoxing/godot-cpp.git
-
+	url = git@github.com:aguoxing/godot-cpp.git
