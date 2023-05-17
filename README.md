@@ -4,17 +4,27 @@
 >
 > Godot使用C++编写脚本；
 
-版本：Godot_v4.0.1-stable_win64、Python3.10.2、Scones4.5.2、MinGW8.1.0
+版本：Godot_v4.0.1-stable_win64、Python3.10.2、Scones4.5.2、MinGW8.1.0、MSVC latest
 
 [示例源码](https://github.com/aguoxing/godot-cpp-example)
 
 ## 安装C++编译器
 
-三大常见编译器GCC，Clang，MSVC，这里以GCC为例
+三大常见编译器GCC，Clang，MSVC，这里以~~GCC~~MSVC为例
+
+!!!bug
+
+目前（20230517）gcc编译的dll有问题，godot无法加载，[godot-cpp](https://github.com/godotengine/godot-cpp/pull/1082)有些[问题](https://github.com/godotengine/godot-cpp/issues/1064)没合并，所有还是用mscv吧
+
+以下的配置需要有一点点修改（主要是编译器路径等），但流程是一样的
+
+!!!
+
+### GCC
 
 安装[MinGW](https://www.mingw-w64.org/downloads/)，[下载地址](https://sourceforge.net/projects/mingw-w64/files/)
 
-找到`MinGW-W64 GCC-8.1.0`，选择`x86_64-win32-seh`，
+找到`MinGW-W64 GCC-8.1.0`，选择`x86_64-win32-seh`
 
 各版本区别参考 [^版本区别]
 
@@ -25,6 +35,14 @@
 `Path`编辑，新增 `%MINGW_HOME%\bin`
 
 打开cmd，` gcc --version` 显示版本号则配置完成
+
+### MSVC
+
+方法1：安装Visual Studio
+
+方法2：通过[Visual Studio 2022 生成工具](https://visualstudio.microsoft.com/zh-hans/downloads/)，下载完是一个`vs_BuildTools.exe`安装包，直接安装即可，安装完成后，在弹出的界面中工作负荷Tab选中**使用C++的桌面开发**，右边会有安装详细信息，按需求选择。安装位置Tab中可以修改安装位置，配置完后点击安装，等待安装完成。
+
+vscode中，如果之前配置好C++插件的话，`Ctr+Shift+P`快捷键打开C++配置界面，在`编译器路径`选项哪里会自动扫描到刚刚安装的MSVC路径，选择一个即可
 
 ## VSCode配置
 
@@ -75,7 +93,7 @@ int main() {
 
 ### 配置构建任务
 
-同样是`Ctrl+Shift+P`快捷键，输入`tasks`，选择`任务: 配置默认测试任务 `或`Tasks:Configure Default Build Task`，选择`C/C++: g++.exe build active file`，如果没有这个选项可以先运行下之前写的hello.cpp文件，项目路径下`g++ .\src\hello.cpp`
+同样是`Ctrl+Shift+P`快捷键，输入`tasks`，选择`任务: 配置默认测试任务 `或`Tasks:Configure Default Build Task`，选择`C/C++: g++.exe build active file`，如果没有这个选项需要选中（激活）一个cpp文件，项目路径下`g++ .\src\hello.cpp`
 
 `.vscode`文件夹下生成了`tasks.json`文件
 
@@ -191,7 +209,7 @@ godot-cpp-example
 	--SConstruct 
 ```
 
-4.编译写好的cpp项目，再此之前，需要有python3的环境，并且安装了[scons](https://scons.org/pages/download.html)，在cpp-example根目录下输入`scons`，等待编译完成
+4、编译写好的cpp项目，再此之前，需要有python3的环境，并且安装了[scons](https://scons.org/pages/download.html)，在cpp-example根目录下输入`scons`，等待编译完成
 
 最后提示`scons: done building targets.`表示编译成功
 
@@ -207,7 +225,7 @@ entry_symbol = "hello_library_init" // 对应cpp项目中的register_types.cpp�
 windows.debug.x86_64 = "res://bin/libgdexample.windows.template_debug.x86_64.dll" // 生成的动态库路径
 ```
 
-5.打开之前新建好的godot项目`godot-cpp-example`，此时新建节点时将可以看到之前创建的hello类，可以像其他节点一样使用，也可以在gd脚本中直接调用
+5、打开之前新建好的godot项目`godot-cpp-example`，此时新建节点时将可以看到之前创建的hello类，hello继承的什么类就是什么节点，可以像其他节点一样使用
 
 ## 参考
 
@@ -216,6 +234,8 @@ windows.debug.x86_64 = "res://bin/libgdexample.windows.template_debug.x86_64.dll
 [Godot引擎如何用C++编写脚本？](https://www.zhihu.com/question/561675567?write)
 
 [VSCode配置C/C++环境](https://zhuanlan.zhihu.com/p/87864677)
+
+[VSCode配置C++环境（MSVC）](https://blog.csdn.net/qq_38981614/article/details/99629597)
 
 [Godot文档](https://docs.godotengine.org/zh_CN/stable/development/cpp/custom_modules_in_cpp.html)
 
